@@ -16,6 +16,7 @@ public:
 
 	static void Mnozenie(int** A, int** B, int** C) {
 		//this naive approach will not work for a large matrix, its too slow
+		//read about SIMPLE matrix multiplication optimizations to make it work for 4k X 4k matrix
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				for (int k = 0; k < N; k++) {
@@ -24,6 +25,7 @@ public:
 			}
 		}
 	}
+
 	void WyswietleniePoczatku()
 	{
 		for (int i = 0; i < 4; i++) {
@@ -33,6 +35,7 @@ public:
 			cout << endl;
 		}
 	}
+
 	void WyswietlenieKonca()
 	{
 		cout << endl << "Dolny prawy rog" << endl;
@@ -44,42 +47,45 @@ public:
 		}
 	}
 
-	void Wypelnienie()
+	void UserFill()
 	{
-		int a = 0;
+		int fillValue = 0;
 		cout << "\nPodaj wartosc, ktora matryca zostanie wypelniona. \n";
-		cin >> a;
-		for (int i = 0; i<N; i++) {
-			for (int j = 0; j<N; j++) {
-				matryca[i][j] = a;
+		cin >> fillValue;
+
+		Fill(fillValue);
+	}
+
+	//such basic method should not be linked to a particular use e.g. cin. what if you want to use it in a different context? see constructor
+	void Fill(int fillValue)
+	{
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				matryca[i][j] = fillValue;
 			}
 		}
 		cout << endl;
 	}
+
 	Macierz() {
 		matryca = new int*[N];
 		for (int i = 0; i < N; ++i)
 			matryca[i] = new int[N];
-
-		int a = 0;
-		for (int i = 0; i<N; i++) {
-			for (int j = 0; j<N; j++) {
-				matryca[i][j] = 0;
-			}
-		}
+		
+		//this way we can fill it without asking the user
+		Fill(0);
 		cout << endl;
 	}
 };
 
 int main() {
-
 	cout << "Macierz A: ";
 	Macierz A;
-	A.Wypelnienie();
+	A.UserFill();
 
 	cout << "Macierz B: ";
 	Macierz B;
-	B.Wypelnienie();
+	B.UserFill();
 
 	Macierz C;
 	auto start = std::chrono::high_resolution_clock::now();
